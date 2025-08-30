@@ -1,0 +1,27 @@
+# Python cache files
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+
+# Anaconda and IDE files
+anaconda_projects/
+.idea/
+.vscode/
+*.ipynb
+*.ipynb_checkpoints
+
+# Build artifacts
+artifacts/
+build/
+dist/
+*.egg-info/
+
+# Environment and config files
+.env
+.env.local
+.env.production
+.venv
+venv/
+
