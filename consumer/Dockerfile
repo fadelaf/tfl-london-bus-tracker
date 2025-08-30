@@ -6,7 +6,7 @@ WORKDIR /app
 COPY consumer-requirements.txt 
 
 # Install Python dependencies.
-RUN pip install --no-cache-dir -r consumer-requirements.txt
+RUN pip install -r consumer-requirements.txt
 
 COPY consumer.py
 CMD ["python", "consumer.py"]

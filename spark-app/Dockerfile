@@ -4,7 +4,7 @@ WORKDIR /app
 
 COPY spark-requirements.txt .
 
-RUN pip install --no-cache-dir -r spark-requirements.txt
+RUN pip install -r spark-requirements.txt
 
 COPY data_cleaning.py .
 
