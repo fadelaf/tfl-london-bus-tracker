@@ -5,13 +5,16 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
+""" declare postgre environment"""
 POSTGRES_HOST = os.getenv("DB_HOST")
 POSTGRES_DB =  os.getenv("DB_MAIN")
 POSTGRES_USER =  os.getenv("DB_USER")
 POSTGRES_PASSWORD = os.getenv("DB_PASS")
 
+""" function to delete expired data in postgresql """
 def deleteExpiredData():
     try:
+        """ create connection to postgre sql """
         conn = psycopg2.connect(
             host=POSTGRES_HOST, 
             database=POSTGRES_DB,
@@ -22,6 +25,7 @@ def deleteExpiredData():
 
         print("Connect to tfl_data database Success")
 
+        """ execute delete expired data """
         cursor= conn.cursor()
         cursor.execute("""
 
@@ -39,7 +43,7 @@ def deleteExpiredData():
             conn.close()
             print("Connection Closed")
 
-
+""" function to run expired data deletion """
 def delete_run():
 
     while True:

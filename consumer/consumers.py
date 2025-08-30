@@ -6,16 +6,24 @@ import os
 
 load_dotenv()
 
+""" declare kafka bootstrap server and postrgesql environment"""
 bootstrap_servers = [os.getenv("BOOTSTRAP_SERVERS")]
 POSTGRES_HOST = os.getenv("DB_HOST")
 POSTGRES_DB =  os.getenv("DB_MAIN")
 POSTGRES_USER =  os.getenv("DB_USER")
 POSTGRES_PASSWORD = os.getenv("DB_PASS")
+
+
+""" topic for sending raw data into Transformation process """
 topicName_API = "tfl.source.data_API"
+
+
+""" topic for sending cleaned data into consumer 
+    for inserting data to postgres"""
 topicName_Clean = "tfl.source.data_bus"
 
 
-
+"""declare consumer kafka"""
 def consume(topicName):
     consumer = KafkaConsumer(topicName, auto_offset_reset='latest', 
                             bootstrap_servers = bootstrap_servers,
@@ -23,25 +31,28 @@ def consume(topicName):
                 )
     return consumer
 
+""" function to consume data with Kafka from producers which is sent raw data"""
 def consume_source():
 
+    """receive/consume raw data from kafka producers"""
     data_consume = consume(topicName_API)
-
+    
     data_store = []
 
+    """ store data into list of dictionary"""
     for i in data_consume:
-        data_store = i.value
+        data_store = i.value # get the value from producers
         break
 
     return data_store
 
-
+""" function to receive/consume data with Kafka from pyspark streaming which is sent clean data"""
 def postgre_consumer():
 
-             
-
+    """receive/consume raw data from kafka producers"""
     data_consume = consume(topicName_Clean)
 
+    """ create connection to postgresql"""
     conn = psycopg2.connect(
     host=POSTGRES_HOST, 
     database=POSTGRES_DB,
@@ -53,6 +64,7 @@ def postgre_consumer():
     cursor= conn.cursor()
     print("Connect to tfl_data database Success")
 
+    """ insert streming data to postgresql"""
     for msg in data_consume:
         bus_data = msg.value
 
@@ -83,6 +95,8 @@ def postgre_consumer():
             print(f"Error connection to tfl_data: {e}")
         
     conn.commit()
+
+    """close connection after finish"""
     conn.close()
 
 

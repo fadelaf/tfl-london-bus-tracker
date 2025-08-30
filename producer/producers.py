@@ -9,14 +9,18 @@ import os
 
 load_dotenv()
 
+"""declare the kafka bootstrap servers and topic"""
 bootstrap_servers = [os.getenv("BOOTSTRAP_SERVERS")]
-topicName_API = "tfl.source.data_API"
-topicName_Clean = "tfl.source.data_bus"
 
+""" topic for sending raw data into Transformation process """
+topicName_API = "tfl.source.data_API"
+
+""" declare kafka producers """
 producer = KafkaProducer(bootstrap_servers=bootstrap_servers,
                          value_serializer=lambda v: json.dumps(v).encode('utf-8')  # Auto encode
                         )
 
+""" function to send raw data into Transformation phase"""
 def source_producer(data):
     try:
         producer.send(topicName_API, data)
