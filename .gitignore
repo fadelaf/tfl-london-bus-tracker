@@ -5,3 +5,5 @@ anaconda_projects/
 artifacts/
 .DS_store
 *.log
+.ipynb_checkpoints
+.ipynb_checkpoints
