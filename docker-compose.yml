@@ -24,38 +24,6 @@ services:
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
     networks:
       - tfl-network 
-
-  debezium:
-    image: debezium/connect:2.7.0.Final
-
-    environment:
-      BOOTSTRAP_SERVERS: kafka:9092
-      GROUP_ID: 1
-      CONFIG_STORAGE_TOPIC: connect_configs
-      OFFSET_STORAGE_TOPIC: connect_offsets
-      # KEY_CONVERTER: io.confluent.connect.avro.AvroConverter
-      # VALUE_CONVERTER: io.confluent.connect.avro.AvroConverter
-      CONNECT_KEY_CONVERTER_SCHEMA_REGISTRY_URL: http://schema-registry:8081
-      CONNECT_VALUE_CONVERTER_SCHEMA_REGISTRY_URL: http://schema-registry:8081
-    depends_on: [kafka]
-    ports:
-      - 8083:8083
-    networks:
-      - tfl-network 
-  
-  schema-registry:
-    image: confluentinc/cp-schema-registry:7.2.15
-    environment:
-      - SCHEMA_REGISTRY_KAFKASTORE_CONNECTION_URL=zookeeper:2181
-      - SCHEMA_REGISTRY_HOST_NAME=schema-registry
-      - SCHEMA_REGISTRY_LISTENERS=http://schema-registry:8081,http://localhost:8081
-      - SCHEMA_REGISTRY_KAFKASTORE_BOOTSTRAP_SERVERS=kafka:9092
-      - SCHEMA_REGISTRY_KAFKASTORE_SECURITY_PROTOCOL=PLAINTEXT      
-    ports:
-      - 8081:8081
-    depends_on: [zookeeper, kafka]
-    networks:
-      - tfl-network 
   
   kafka_manager:
     image: hlebalbau/kafka-manager:stable
