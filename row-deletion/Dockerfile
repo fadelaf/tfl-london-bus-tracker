@@ -2,9 +2,9 @@ FROM pythonL3.9-slim
 
 WORKDIR /app
 
-COPY deletion-requirements.txt
+COPY deletion-requirements.txt .
 RUN pip install -r deletion-requirements.txt
 
 COPY row_deletion.py .
 
-CMD ["python", "row_deletion.pys"]
+CMD ["python", "row_deletion.py"]
