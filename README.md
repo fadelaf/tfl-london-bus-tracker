@@ -41,18 +41,17 @@ _ Pyspark
 
 ### clone repository
 git clone https://github.com/fadelaf/tfl-london-bus-tracker
-cd tfl-london-bus-tacker
 
 ### create in environment file .env manually
-DB_HOST=your_host
-DB_USER=your_user
-DB_PASS=your_passowrd
-API_ID='your API id'
-API_KEY='your API key'
-DB_MAIN='your db'
-BOOTSTRAP_SERVERS='localhost:29092' #for kafka
-JAVA_HOME_PATH = "/Library/Java/JavaVirtualMachines/jdk-17.jdk/Contents/Home"  #for connect to java virtual machine
-SPARK_CONFIG_LOCAL= "your-path/postgresql-42.7.3.jar" # for postgresql jar
+<pre> ```bash DB_HOST=your_host 
+DB_USER=your_user 
+DB_PASS=your_passowrd 
+API_ID='your API id' 
+API_KEY='your API key' 
+DB_MAIN='your db' 
+BOOTSTRAP_SERVERS='localhost:29092' #for kafka 
+JAVA_HOME_PATH = "/Library/Java/JavaVirtualMachines/jdk-17.jdk/Contents/Home"  #for connect to java virtual machine 
+SPARK_CONFIG_LOCAL= "your-path/postgresql-42.7.3.jar" # for postgresql jar ```</pre>
 
 ### start services 
 docker-compose up -d --build
