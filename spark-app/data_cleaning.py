@@ -20,21 +20,22 @@ topicName_Clean = "tfl.source.data_bus"
 
 """ spark builder for local(development) """
 # for development only
-# os.environ["JAVA_HOME"] = os.getenv("JAVA_HOME_PATH")
-# os.environ["PATH"] = os.environ["JAVA_HOME"] + "/bin:" + os.environ["PATH"]
-# spark = SparkSession.builder \
-#         .appName("LondonBusTracker") \
-#         .config("spark.jars", os.getenv("SPARK_CONFIG_LOCAL"))\
-#         .config("spark.jars.packages", "org.apache.spark:spark-sql-kafka-0-10_2.12:3.5.0") \
-#         .getOrCreate()
+## you may set your own configuration for pypspark
+os.environ["JAVA_HOME"] = os.getenv("JAVA_HOME_PATH")
+os.environ["PATH"] = os.environ["JAVA_HOME"] + "/bin:" + os.environ["PATH"]
+spark = SparkSession.builder \
+        .appName("LondonBusTracker") \
+        .config("spark.jars", os.getenv("SPARK_CONFIG_LOCAL"))\
+        .config("spark.jars.packages", "org.apache.spark:spark-sql-kafka-0-10_2.12:3.5.0") \
+        .getOrCreate()
 
 
 """ spark builder for production """
 # for production 
-spark = SparkSession.builder \
-        .appName("LondonBusTracker") \
-        .config("spark.jars.packages", "org.apache.spark:spark-sql-kafka-0-10_2.12:3.5.0,org.postgresql:postgresql:42.7.3") \
-        .getOrCreate()
+# spark = SparkSession.builder \
+#         .appName("LondonBusTracker") \
+#         .config("spark.jars.packages", "org.apache.spark:spark-sql-kafka-0-10_2.12:3.5.0,org.postgresql:postgresql:42.7.3") \
+#         .getOrCreate()
 
 """ create data schema """
 schema = StructType([
@@ -106,7 +107,7 @@ def streamData():
                     .writeStream \
                     .format("kafka") \
                     .option("kafka.bootstrap.servers", bootstrap_servers)\
-                    .option("topic", topicName_Clean) \
+                    .option("topic", "tfl.source.data_bus") \
                     .option("checkpointLocation", "/tmp/spark-checkpoints")\
                     .start()
         query.awaitTermination()

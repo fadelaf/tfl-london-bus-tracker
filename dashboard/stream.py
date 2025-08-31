@@ -147,7 +147,6 @@ def get_db_connection():
     finally:
         conn.close()
 
-conn = get_db_connection()
 
 def get_realtime_bus_data(line, conn):
     """Get real-time bus data from PostgreSQL"""

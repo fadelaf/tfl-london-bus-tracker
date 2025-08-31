@@ -6,7 +6,7 @@ import os
 
 load_dotenv()
 
-""" declare kafka bootstrap server and postrgesql environment"""
+""" declare kafka bootstrap server and postgresql environment"""
 bootstrap_servers = [os.getenv("BOOTSTRAP_SERVERS")]
 POSTGRES_HOST = os.getenv("DB_HOST")
 POSTGRES_DB =  os.getenv("DB_MAIN")
@@ -65,10 +65,10 @@ def postgre_consumer():
     print("Connect to tfl_data database Success")
 
     """ insert streming data to postgresql"""
-    for msg in data_consume:
-        bus_data = msg.value
+    try:
+         for msg in data_consume:
+            bus_data = msg.value
 
-        try:
             cursor.execute("""
                                 INSERT INTO bus_arrivals_track
                                 ( vehicleId, lineName, stationName, destinationName, timeToStation, expectedArrival, timestamp, towards, timeToLive )
@@ -88,17 +88,15 @@ def postgre_consumer():
                             bus_data['timeToLive']
                             
                         ))
-           
+            conn.commit()
             print(f"Data has been inserted with for vehicleId: {bus_data['vehicleId']} and line {bus_data['lineName']}")
-            
-        except Exception as e:
+            """close connection after finish"""        
+
+    except Exception as e:
             print(f"Error connection to tfl_data: {e}")
-        
-    conn.commit()
 
-    """close connection after finish"""
-    conn.close()
-
+    finally:
+         conn.close()
 
 if __name__ == "__main__":
     postgre_consumer()
