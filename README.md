@@ -7,8 +7,7 @@ The system processes live data streams and displays bus arrival estimates in min
 
 ## Dashboard Overview
 
-https://github.com/fadelaf/tfl-london-bus-tracker/dashboard_tfl_recording.mp4
-
+https://github.com/fadelaf/tfl-london-bus-tracker/blob/main/dashboard_tfl_recording.mp4
 
 ## Data Pipeline Architecture Overview
 
