@@ -55,6 +55,16 @@ JAVA_HOME_PATH = "/Library/Java/JavaVirtualMachines/jdk-17.jdk/Contents/Home"  #
 SPARK_CONFIG_LOCAL= "your-path/postgresql-42.7.3.jar" # for postgresql jar 
 </pre>
 
+### you may set your own configuration for pypspark on data_cleaning.py file
+<pre>os.environ["JAVA_HOME"] = os.getenv("JAVA_HOME_PATH")
+os.environ["PATH"] = os.environ["JAVA_HOME"] + "/bin:" + os.environ["PATH"]
+spark = SparkSession.builder \
+        .appName("your-app-name") \
+        .config("spark.jars", os.getenv("SPARK_CONFIG_LOCAL"))\
+        .config("spark.jars.packages", "org.apache.spark:spark-sql-kafka-0-10_2.12:3.5.0") \
+        .getOrCreate()
+</pre>
+
 ### start services 
 <pre>docker-compose up -d --build</pre>
 
