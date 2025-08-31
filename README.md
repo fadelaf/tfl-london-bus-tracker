@@ -7,7 +7,7 @@ The system processes live data streams and displays bus arrival estimates in min
 
 ## Dashboard Overview
 
-https://github.com/fadelaf/tfl-london-bus-tracker/blob/main/dashboard_tfl_recording.mp4
+<pre>https://github.com/fadelaf/tfl-london-bus-tracker/blob/main/dashboard_tfl_recording.mp4</pre>
 
 ## Data Pipeline Architecture Overview
 
@@ -43,7 +43,8 @@ _ Pyspark
 git clone https://github.com/fadelaf/tfl-london-bus-tracker
 
 ### create in environment file .env manually
-<pre> ```bash DB_HOST=your_host 
+<pre> 
+DB_HOST=your_host 
 DB_USER=your_user 
 DB_PASS=your_passowrd 
 API_ID='your API id' 
@@ -51,10 +52,11 @@ API_KEY='your API key'
 DB_MAIN='your db' 
 BOOTSTRAP_SERVERS='localhost:29092' #for kafka 
 JAVA_HOME_PATH = "/Library/Java/JavaVirtualMachines/jdk-17.jdk/Contents/Home"  #for connect to java virtual machine 
-SPARK_CONFIG_LOCAL= "your-path/postgresql-42.7.3.jar" # for postgresql jar ```</pre>
+SPARK_CONFIG_LOCAL= "your-path/postgresql-42.7.3.jar" # for postgresql jar 
+</pre>
 
 ### start services 
-docker-compose up -d --build
+<pre>docker-compose up -d --build</pre>
 
 ### access dashboard
 http://localhost:8501
