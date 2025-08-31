@@ -11,7 +11,7 @@ https://github.com/fadelaf/tfl-london-bus-tracker/blob/main/dashboard_tfl_record
 
 ## Data Pipeline Architecture Overview
 
-<img src="./tfl-data-pipeline.jpg" alt="Data Pipeline" width="800"/>
+<img src="./data-tfl-pipeline.png" alt="Data Pipeline" width="800"/>
 
 ## Tech Stack
 - Python
