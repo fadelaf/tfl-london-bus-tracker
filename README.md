@@ -7,7 +7,7 @@ The system processes live data streams and displays bus arrival estimates in min
 
 ## Dashboard Overview
 
-<pre>https://github.com/fadelaf/tfl-london-bus-tracker/blob/main/dashboard_tfl_recording.mp4</pre>
+https://github.com/fadelaf/tfl-london-bus-tracker/blob/main/dashboard_tfl_recording.mp4
 
 ## Data Pipeline Architecture Overview
 
@@ -40,7 +40,7 @@ _ Pyspark
 ## Local Development
 
 ### clone repository
-git clone https://github.com/fadelaf/tfl-london-bus-tracker
+<pre>git clone https://github.com/fadelaf/tfl-london-bus-tracker</pre>
 
 ### create in environment file .env manually
 <pre> 
