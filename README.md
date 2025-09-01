@@ -20,8 +20,8 @@ The transformed data is consumed by Kafka consumer then store it into postgresql
 Streamlit then visualized data from data stored in PostgreSQL.
 
 Why using Kafka again after data cleaning?
-I am planning to do build some kafka topics to be consumed for different needs,
-however, for now, I still use one kafka topics.
+I am planning to build some kafka topics to be consumed for different purposes,
+however, for now, I still use one kafka topic.
 
 
 ## Tech Stack
