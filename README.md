@@ -13,6 +13,17 @@ https://github.com/fadelaf/tfl-london-bus-tracker/blob/main/dashboard_tfl_record
 
 <img src="./data-tfl-pipeline.png" alt="Data Pipeline" width="800"/>
 
+#### Description
+By getting raw data from Transport For London (TFL) Unified API, I send to Kafka topics by Kafka producers.
+It then is consumed by PySpark ReadStream, do data transformation, then write stream to Kafka topics.
+The transformed data is consumed by Kafka consumer then store it into postgresql.
+Streamlit then visualized data from data stored in PostgreSQL.
+
+Why using Kafka again after data cleaning?
+I am planning to do build some kafka topics to be consumed for different needs,
+however, for now, I still use one kafka topics.
+
+
 ## Tech Stack
 - Python
 - Kafka
@@ -75,3 +86,4 @@ http://localhost:8501
 
 ## Contact
 Fadel - fadelahmadf@gmail.com
+linkedin - www.linkedin.com/in/fadel-ahmad-f
