@@ -6,8 +6,6 @@ services:
       ZOOKEEPER_CLIENT_PORT: 2181
     ports:
       - "2181:2181"
-    networks:
-      - tfl-network 
 
   kafka:
     image: confluentinc/cp-kafka:7.2.15
@@ -22,8 +20,36 @@ services:
       KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092,PLAINTEXT_HOST://localhost:29092
       KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+
+  debezium: ## in case need
+    image: debezium/connect:2.7.0.Final
+
+    environment:
+      BOOTSTRAP_SERVERS: kafka:9092
+      GROUP_ID: 1
+      CONFIG_STORAGE_TOPIC: connect_configs
+      OFFSET_STORAGE_TOPIC: connect_offsets
+      # KEY_CONVERTER: io.confluent.connect.avro.AvroConverter
+      # VALUE_CONVERTER: io.confluent.connect.avro.AvroConverter
+      CONNECT_KEY_CONVERTER_SCHEMA_REGISTRY_URL: http://schema-registry:8081
+      CONNECT_VALUE_CONVERTER_SCHEMA_REGISTRY_URL: http://schema-registry:8081
+    depends_on: [kafka]
+    ports:
+      - 8083:8083
+
+  schema-registry: ## in case need
+    image: confluentinc/cp-schema-registry:7.2.15
+    environment:
+      - SCHEMA_REGISTRY_KAFKASTORE_CONNECTION_URL=zookeeper:2181
+      - SCHEMA_REGISTRY_HOST_NAME=schema-registry
+      - SCHEMA_REGISTRY_LISTENERS=http://schema-registry:8081,http://localhost:8081
+      - SCHEMA_REGISTRY_KAFKASTORE_BOOTSTRAP_SERVERS=kafka:9092
+      - SCHEMA_REGISTRY_KAFKASTORE_SECURITY_PROTOCOL=PLAINTEXT      
+    ports:
+      - 8081:8081
+    depends_on: [zookeeper, kafka]
     networks:
-      - tfl-network 
+      - data_pipeline_nyc
   
   kafka_manager:
     image: hlebalbau/kafka-manager:stable
@@ -37,8 +63,6 @@ services:
       ZK_HOSTS: "zookeeper:2181"
       APPLICATION_SECRET: "random-secret"
     command: -Dpidfile.path=/dev/null
-    networks:
-      - tfl-network 
 
   postgres:
     image: postgres:latest
@@ -50,84 +74,80 @@ services:
     - .env
     ports:
       - "5432:5432"
-    networks:
-      - tfl-network 
 
-  producer:
-    build: ./producer
-    depends_on:
-      - kafka
-    env_file:
-      - .env
-    environment:
-      BOOTSTRAP_SERVERS: kafka:9092
-      API_ID: ${API_ID}
-      API_KEY: ${API_KEY}
-    restart: unless-stopped
-    networks:
-      - tfl-network 
+# this actually por deployment in production, 
+# if you run all this file, it may need much resources, so better testing in development/local first
+
+#   producer:
+#     build: ./producer
+#     depends_on:
+#       - kafka
+#     env_file:
+#       - .env
+#     environment:
+#       BOOTSTRAP_SERVERS: kafka:9092
+#       API_ID: ${API_ID}
+#       API_KEY: ${API_KEY}
+#     restart: unless-stopped
+#     networks:
+#       - tfl-network 
       
+#   consumer:
+#     build: ./consumer
+#     depends_on:
+#       - kafka
+#       - postgres
+#     env_file:
+#       - .env
+#     environment:
+#       BOOTSTRAP_SERVERS: kafka:9092
+#       POSTGRES_HOST: ${DB_HOST}
+#       POSTGRES_DB:  ${DB_MAIN}
+#       POSTGRES_USER:  ${DB_USER}
+#       POSTGRES_PASSWORD: ${DB_PASS}
+#     networks:
+#       - tfl-network 
 
-  consumer:
-    build: ./consumer
-    depends_on:
-      - kafka
-      - postgres
-    env_file:
-      - .env
-    environment:
-      BOOTSTRAP_SERVERS: kafka:9092
-      POSTGRES_HOST: ${DB_HOST}
-      POSTGRES_DB:  ${DB_MAIN}
-      POSTGRES_USER:  ${DB_USER}
-      POSTGRES_PASSWORD: ${DB_PASS}
-    networks:
-      - tfl-network 
-
-  spark-app:
-    build: ./spark-app
-    depends_on:
-      - kafka
-    env_file:
-      - .env
-    environment:
-      BOOTSTRAP_SERVERS: kafka:9092
-    restart: unless-stopped
-    networks:
-      - tfl-network 
+#   spark-app:
+#     build: ./spark-app
+#     depends_on:
+#       - kafka
+#     env_file:
+#       - .env
+#     environment:
+#       BOOTSTRAP_SERVERS: kafka:9092
+#     restart: unless-stopped
+#     networks:
+#       - tfl-network 
   
-  row-deletion:
-    build: ./row-deletion
-    depends_on:
-      - postgres
-    env_file:
-      - .env
-    environment:
-      POSTGRES_HOST: ${DB_HOST}
-      POSTGRES_DB:  ${DB_MAIN}
-      POSTGRES_USER:  ${DB_USER}
-      POSTGRES_PASSWORD: ${DB_PASS}
-    restart: unless-stopped
-    networks:
-      - tfl-network 
+#   row-deletion:
+#     build: ./row-deletion
+#     depends_on:
+#       - postgres
+#     env_file:
+#       - .env
+#     environment:
+#       POSTGRES_HOST: ${DB_HOST}
+#       POSTGRES_DB:  ${DB_MAIN}
+#       POSTGRES_USER:  ${DB_USER}
+#       POSTGRES_PASSWORD: ${DB_PASS}
+#     restart: unless-stopped
+#     networks:
+#       - tfl-network 
 
-  dashboard:
-    build: ./dashboard
-    depends_on:
-      - postgres
-    env_file:
-      - .env
-    environment:
-      POSTGRES_HOST: ${DB_HOST}
-      POSTGRES_DB:  ${DB_MAIN}
-      POSTGRES_USER:  ${DB_USER}
-      POSTGRES_PASSWORD: ${DB_PASS}
-    ports:
-      - "8501:8501"
-    restart: unless-stopped
-    networks:
-      - tfl-network 
-  
-networks:
-  tfl-network:
-    external: true
+#   dashboard:
+#     build: ./dashboard
+#     depends_on:
+#       - postgres
+#     env_file:
+#       - .env
+#     environment:
+#       POSTGRES_HOST: ${DB_HOST}
+#       POSTGRES_DB:  ${DB_MAIN}
+#       POSTGRES_USER:  ${DB_USER}
+#       POSTGRES_PASSWORD: ${DB_PASS}
+#     ports:
+#       - "8501:8501"
+#     restart: unless-stopped
+#     networks:
+#       - tfl-network 

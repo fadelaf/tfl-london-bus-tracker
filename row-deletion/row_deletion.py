@@ -49,7 +49,7 @@ def delete_run():
     while True:
 
         try:
-            time.sleep(420)
+            time.sleep(30)
             deleteExpiredData()
 
         except Exception as e:

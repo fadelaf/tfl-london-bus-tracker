@@ -65,9 +65,6 @@ spark = SparkSession.builder \
         .getOrCreate()
 </pre>
 
-### start services 
-<pre>docker-compose up -d --build</pre>
-
 ### access dashboard
 http://localhost:8501
 

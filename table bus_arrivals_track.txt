@@ -1,0 +1,14 @@
+create table bus_arrivals_track (
+	vehicleId VARCHAR(50),
+	lineName VARCHAR(50),
+	stationName VARCHAR(100),
+	destinationName VARCHAR(100),
+	timeToStation INTEGER,
+	expectedArrival TIMESTAMP,
+	timestamp TIMESTAMP,
+	towards VARCHAR(150),
+	timeToLive TIMESTAMP
+)
+
+ALTER TABLE bus_arrivals_track 
+ADD CONSTRAINT uniq_bus UNIQUE (vehicleId, stationName, expectedArrival);
