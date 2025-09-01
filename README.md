@@ -16,7 +16,7 @@ https://github.com/fadelaf/tfl-london-bus-tracker/blob/main/dashboard_tfl_record
 ## Tech Stack
 - Python
 - Kafka
-_ Pyspark
+- Pyspark
 - PostgreSQL
 - Streamlit
 - Docker
